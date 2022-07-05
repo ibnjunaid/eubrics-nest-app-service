@@ -36,7 +36,7 @@ export function getDataBaseConfig(): DatabaseConfig {
       username: 'sql6503857',
       password: 'Y7kKgnYFe4',
       database: 'sql6503857',
-      synchronize: false,
+      synchronize: true,
     };
   }
 }
