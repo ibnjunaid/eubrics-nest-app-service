@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Patch,
   Post,
   UseGuards,
@@ -18,7 +19,7 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('/list')
+  @Get('/list')
   async ListTodos(
     @Body() createTodo: CreateTodoDto,
     @GetScopedUser() user: ScopedUser,
