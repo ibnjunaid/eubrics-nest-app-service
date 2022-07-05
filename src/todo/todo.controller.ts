@@ -24,7 +24,7 @@ export class TodoController {
     @Body() createTodo: CreateTodoDto,
     @GetScopedUser() user: ScopedUser,
   ) {
-    return this.todoService.addTodo(createTodo, user);
+    return this.todoService.listTodos(user);
   }
 
   @UseGuards(JwtAuthGuard)

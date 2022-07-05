@@ -11,7 +11,7 @@ export class Todo {
   message: string;
 
   @ManyToOne(() => User)
-  userId: User;
+  user: User;
 
   @ManyToOne(() => Behaviour)
   behaviour: Behaviour;

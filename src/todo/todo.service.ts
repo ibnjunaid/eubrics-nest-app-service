@@ -25,14 +25,10 @@ export class TodoService {
   ) {}
 
   async listTodos(scopedUser: ScopedUser) {
-    const todoList = await this.todoRepository.find({
-      where: {
-        userId: {
-          id: scopedUser.userId,
-        },
-      },
-      relations: ['user'],
-    });
+    const todoList = await this.todoRepository
+      .createQueryBuilder()
+      .where('userId = :id', { id: scopedUser.userId })
+      .getMany();
     return todoList;
   }
 
@@ -47,9 +43,9 @@ export class TodoService {
     const user = await this.userRepository.findOneBy({
       id: scopedUser.userId,
     });
-    todo.userId = user;
+    todo.user = user;
     const savedTodo = await this.todoRepository.save(todo);
-    delete savedTodo.userId;
+    delete savedTodo.user;
     return savedTodo;
   }
 
@@ -57,7 +53,7 @@ export class TodoService {
     const todoToDelete = await this.todoRepository.findOneBy({
       id: deleteTodo.todoId,
     });
-    if (todoToDelete.userId.id === scopedUser.userId) {
+    if (todoToDelete.user.id === scopedUser.userId) {
       const deletedResult = await this.todoRepository.delete(todoToDelete);
       return deletedResult;
     } else {
