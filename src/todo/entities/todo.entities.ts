@@ -1,11 +1,6 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
-import { Behaviour } from '../../behaviours/entities/behaviour.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from '../../auth/entities/user.entity';
+import { Behaviour } from '../../behaviour/entities/behaviour.entity';
 
 @Entity()
 export class Todo {
@@ -15,10 +10,9 @@ export class Todo {
   @Column()
   message: string;
 
-  @Column({ default: false })
-  userId: boolean;
+  @ManyToOne(() => User)
+  userId: User;
 
-  @OneToOne(() => Behaviour)
-  @JoinColumn()
+  @ManyToOne(() => Behaviour)
   behaviour: Behaviour;
 }

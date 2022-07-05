@@ -19,7 +19,8 @@ interface DatabaseConfig {
  * @returns Object
  */
 export function getDataBaseConfig(): DatabaseConfig {
-  if (process.env.NODE_ENV) {
+  console.log('ENV: ' + process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'development') {
     return {
       host: 'localhost',
       port: 3306,
