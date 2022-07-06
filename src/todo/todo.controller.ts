@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  Param,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -19,12 +20,12 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('/list')
+  @Get('/list/:behaviourId')
   async ListTodos(
-    @Body() createTodo: CreateTodoDto,
+    @Param('behaviourId') behaviourId,
     @GetScopedUser() user: ScopedUser,
   ) {
-    return this.todoService.listTodos(user);
+    return this.todoService.listTodos(behaviourId, user);
   }
 
   @UseGuards(JwtAuthGuard)

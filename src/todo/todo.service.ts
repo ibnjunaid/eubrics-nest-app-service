@@ -24,10 +24,13 @@ export class TodoService {
     private userRepository: Repository<User>,
   ) {}
 
-  async listTodos(scopedUser: ScopedUser) {
+  async listTodos(behaviourId: any, scopedUser: ScopedUser) {
     const todoList = await this.todoRepository
       .createQueryBuilder()
-      .where('userId = :id', { id: scopedUser.userId })
+      .where('userId = :id AND behaviourId = :behaviourId', {
+        id: scopedUser.userId,
+        behaviourId: behaviourId,
+      })
       .getMany();
     return todoList;
   }
@@ -50,15 +53,15 @@ export class TodoService {
   }
 
   async deleteTodo(deleteTodo: DeleteTodoDto, scopedUser: ScopedUser) {
-    const todoToDelete = await this.todoRepository.findOneBy({
-      id: deleteTodo.todoId,
-    });
-    if (todoToDelete.user.id === scopedUser.userId) {
-      const deletedResult = await this.todoRepository.delete(todoToDelete);
-      return deletedResult;
-    } else {
-      throw new ForbiddenException();
-    }
+    const todoToDelete = await this.todoRepository
+      .createQueryBuilder()
+      .where('userId = :userId AND id = :todoId', {
+        userId: scopedUser.userId,
+        todoId: deleteTodo.todoId,
+      })
+      .getOne();
+    const deletedResult = await this.todoRepository.delete(todoToDelete);
+    return deletedResult;
   }
 
   //TODO: Validation that allow only users to delete thier todo
